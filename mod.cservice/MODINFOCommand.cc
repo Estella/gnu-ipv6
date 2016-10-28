@@ -242,7 +242,7 @@ if (command == "ACCESS")
 	 * Check we aren't trying to change someone with access
 	 * higher (or equal) than ours.
 	 */
-
+	if (!theUser->getFlag(sqlUser::F_POWER))
 	if (level <= targetLevel)
 		{
 		/*
@@ -274,11 +274,37 @@ if (command == "ACCESS")
 		return false;
 		}
 
+if ((!theUser->getFlag(sqlUser::F_POWER)) && (newAccess > 999))
+        {
+                bot->Notice(theClient,
+                        bot->getResponse(theUser,
+                                language::inval_access,
+                                string("Invalid access level.")));
+                return false;
+        }
+
+        if ((theUser->getFlag(sqlUser::F_POWER)) && (newAccess > 1000))
+        {
+                bot->Notice(theClient,
+                        bot->getResponse(theUser,
+                                language::inval_access,
+                                string("Invalid access level.")));
+                return false;
+        }
+
+        if (!theUser->getFlag(sqlUser::F_POWER))
+        if ((level > 500) && (!theChan->getFlag(sqlChannel::F_SPECIAL)) && (st[1] != "*") && (newAccess > 500))
+        {
+                bot->Notice(theClient, "Access levels on regular channels cannot exceed 500 (except SPECIAL)");
+                return false;
+        }
+
 	/*
 	 * And finally, check they aren't trying to give someone
 	 * higher access than them.
 	 */
 
+	if (!theUser->getFlag(sqlUser::F_POWER))
 	if (level <= newAccess)
 		{
 		bot->Notice(theClient,
@@ -326,7 +352,7 @@ if (command == "ACCESS")
 
 if (command == "AUTOMODE")
 	{
-	
+
 	if(st[1] == "*")
 	{ //Admin channel?
 		bot->Notice(theClient,"If there's anything more important than my ego around, I want it caught and shot now.");
@@ -339,6 +365,7 @@ if (command == "AUTOMODE")
 	 * if they have the same access as we do.
 	 */
 
+	if (!theUser->getFlag(sqlUser::F_POWER))
 	if ( (level < targetLevel) || ((level == targetLevel) && (targetUser != theUser)) )
 		{
 		bot->Notice(theClient,

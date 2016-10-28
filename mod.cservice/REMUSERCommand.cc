@@ -93,6 +93,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	sqlUser* targetUser = bot->getUserRecord(st[2]);
 
 	int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
+	if (!theUser->getFlag(sqlUser::F_POWER))
 	if (((level < level::remuser) || ((st[1] == "*") && (level < adminlevel::remuser))) &&
 		((targetUser) && targetUser != theUser))
 	{
@@ -141,6 +142,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	 *  Unless they are trying to remove themself.. in which case its ok ;)
 	 */
 
+	if (!theUser->getFlag(sqlUser::F_POWER))
 	if ((level <= targetLevel) && (targetUser != theUser))
 	{
 		bot->Notice(theClient,
@@ -151,7 +153,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	}
 
 
-	if ((theChan->getName() == "*") && (targetUser == theUser))
+	if ((theChan->getName() == "*") && (targetUser == theUser)) && (!theUser->getFlag(sqlUser::F_POWER)))
 	{
 		bot->Notice(theClient,
                         bot->getResponse(theUser,
@@ -160,6 +162,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
                 return false;
 	}
 
+	if (!theUser->getFlag(sqlUser::F_POWER))
 	if ((targetLevel == 500) && (targetUser == theUser))
 	{
 		bot->Notice(theClient,
