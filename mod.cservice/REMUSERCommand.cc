@@ -153,7 +153,7 @@ bool REMUSERCommand::Exec( iClient* theClient, const string& Message )
 	}
 
 
-	if ((theChan->getName() == "*") && (targetUser == theUser)) && (!theUser->getFlag(sqlUser::F_POWER)))
+	if (((theChan->getName() == "*") && (targetUser == theUser)) && (!theUser->getFlag(sqlUser::F_POWER)))
 	{
 		bot->Notice(theClient,
                         bot->getResponse(theUser,
