@@ -102,6 +102,8 @@ if ((st[1][0] != '#') && (st[1][0] != '*'))
 	 */
 
 	int targetLevel = bot->getAdminAccessLevel(targetUser);
+
+	if (!theUser->getFlag(sqlUser::F_POWER))
 	if (targetLevel >= level)
 	{
 		bot->Notice(theClient,
@@ -124,6 +126,9 @@ if ((st[1][0] != '#') && (st[1][0] != '*'))
 	bot->Notice(theClient, "%s has been globally suspended and will have level 0 access in all"
 		" channels until unsuspended.",
 		targetUser->getUserName().c_str());
+
+	if ((theUser->getFlag(sqlUser::F_POWER)) && (targetUser == theUser))
+		bot->Notice(theClient,"CSC is You!! YOU CAN NEVER ESCAPE!");
 
 	targetUser->writeEvent(sqlUser::EV_SUSPEND, theUser, st.assemble(2));
 
@@ -208,6 +213,7 @@ if (!usrLevel)
 	return true;
 }
 
+if (!theUser->getFlag(sqlUser::F_POWER))
 if (level <= usrLevel)
 {
 	bot->Notice(theClient,
@@ -256,9 +262,11 @@ if (suspReason.empty()) suspReason = "No reason supplied.";
 
 if( 0 == finalDuration )
 {
+	if (theUser->getFlag(sqlUser::F_POWER)) level = bot->getAdminAccessLevel(theUser);
 	/*
 	 * Was this suspension set with a higher suspend level?
 	 */
+	if (!theUser->getFlag(sqlUser::F_POWER))
 	if (aLevel->getSuspendLevel() > level)
 	{
 		bot->Notice(theClient,

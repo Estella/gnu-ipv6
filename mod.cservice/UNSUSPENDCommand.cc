@@ -78,6 +78,7 @@ if ((st[1][0] != '#') && (st[1][0] != '*'))
 {
 	// Got enough admin access?
 	int level = bot->getAdminAccessLevel(theUser);
+	if (!theUser->getFlag(sqlUser::F_POWER))
 	if (level < level::globalsuspend)
 	{
 		Usage(theClient);
@@ -142,6 +143,7 @@ if(!theChan)
 
 // Check level.
 int level = bot->getEffectiveAccessLevel(theUser, theChan, true);
+if (!theUser->getFlag(sqlUser::F_POWER))
 if ((level < level::unsuspend) || (( st[1] == "*" ) && (level < adminlevel::unsuspend)))
 	{
 	bot->Notice(theClient,
@@ -185,6 +187,7 @@ if (aLevel->getSuspendExpire() == 0)
  *  Finally, check we have access to perform the unsuspend.
  */
 
+if (!theUser->getFlag(sqlUser::F_POWER))
 if ((aLevel->getAccess()) >= level)
 	{
 	bot->Notice(theClient,
@@ -195,7 +198,7 @@ if ((aLevel->getAccess()) >= level)
 /*
  * Was this suspension set with a higher suspend level?
  */
-
+if (!theUser->getFlag(sqlUser::F_POWER))
 if (aLevel->getSuspendLevel() > level)
 {
 	bot->Notice(theClient,
