@@ -355,6 +355,7 @@ if( st[1][0] != '#' ) // Didn't find a hash?
 		}
 	}
 #endif
+*/
 	if (option == "POWER")
         {
                 int admLevel = bot->getAdminAccessLevel(theUser);
