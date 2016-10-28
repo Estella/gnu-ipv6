@@ -90,7 +90,7 @@
  * entries are in the SQL table.  Default setting allows login from any IP
  * if there are no entries for the username in the SQL table.
  */
-#define IPR_DEFAULT_REJECT
+#undef IPR_DEFAULT_REJECT
 
 /**
  * Define this if you want to enable the 'cs.log' file (log of all commands
@@ -103,7 +103,7 @@
  * Define this if you want TOTP authentication, note you must have liboath
  * installed, and configure --with-liboath for totp to work
  */
-#define TOTP_AUTH_ENABLED
+#undef TOTP_AUTH_ENABLED
 
 /**
  * Define this if you want channel registration process to be handled internally within gnuworld
