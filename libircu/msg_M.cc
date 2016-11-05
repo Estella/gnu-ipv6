@@ -477,9 +477,15 @@ for( const char* modePtr = Param[ 2 ] ; *modePtr ; ++modePtr )
 		case 'n':
 		case 'I':
 		case 'h':
+			if( plus )	theClient->setModeH() ;
+			else		theClient->removeModeH() ;
+			break;
+		case 'f':
+			if( plus )	theClient->setModeF() ;
+			else		theClient->removeModeF() ;
+			break;
 		case 'X':
 		case 'R':
-		case 'f':
 			// Unsupported but used on networks that
 			// GNUWorld runs on.
 			// TODO?
