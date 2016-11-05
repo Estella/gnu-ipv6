@@ -8415,6 +8415,8 @@ bool cservice::doCommonAuth(iClient* theClient, string username)
 	 */
 	if (!LoC)
 		this->MyUplink->UserLogin(theClient, theUser->getUserName(), this);
+		if (!theUser->getHostName().empty())
+		this->MyUplink->SendOutFakeHost(theClient, theUser->getHostName().c_str(), this);
 
 	/*
 	 * If the user account has been suspended, make sure they don't get

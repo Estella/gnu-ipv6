@@ -295,6 +295,21 @@ public:
 #endif
 		}
 
+	/*
+	 * This is only the beginning, probably ircu can't undo a hidden/fake host
+	 */
+	inline void clearFakeHost()
+		{
+#ifdef SRVX
+		fakeHost = std::string();
+		removeModeF();
+		if (isModeX())
+			insecureHost = account + hiddenHostSuffix ;
+		else
+			insecureHost = getRealInsecureHost();
+#endif
+		}
+
 #ifdef SRVX
 	/**
 	  * Retrieve the iClient's fakehost.

@@ -431,7 +431,24 @@ if( st[1][0] != '#' ) // Didn't find a hash?
                         option.c_str());
                         return true;
         }
-
+	if ((option == "HOST") || (option == "HOSTNAME"))
+	{
+		if (value == "OFF")
+		{
+			//theClient->clearFakeHost();
+			theUser->setHostName(string());
+			theUser->commit(theClient);
+			bot->Notice(theClient, "Your host was successfully cleared. Please reconnect to apply your original host.");
+		}
+		else
+		{
+			theUser->setHostName(st[2]);
+			theUser->commit(theClient);
+			server->SendOutFakeHost(theClient, theUser->getHostName().c_str(), bot);
+			bot->Notice(theClient, "Your hostname is now set to %s", theUser->getHostName().c_str());
+		}
+		return true;
+	}
 	bot->Notice(theClient,
 		bot->getResponse(theUser,
 			language::invalid_option,

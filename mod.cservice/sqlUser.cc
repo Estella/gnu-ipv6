@@ -81,6 +81,7 @@ sqlUser::sqlUser(dbHandle* _SQLDb)
    notes_sent(0),
    failed_logins(0),
    failed_login_ts(0),
+   hostname(),
    SQLDb( _SQLDb )
 {
 }
@@ -204,6 +205,8 @@ verifdata = SQLDb->GetValue(row, 10);
 failed_logins = 0;
 failed_login_ts = 0;
 totp_key = SQLDb->GetValue(row, 11);
+hostname = SQLDb->GetValue(row, 12); 
+
 /* Fetch the "Last Seen" time from the users_lastseen table. */
 
 }
@@ -232,7 +235,8 @@ queryString	<< queryHeader
 		<< "maxlogins = " << maxlogins << ", "
 		<< "last_updated = now()::abstime::int4, "
 		<< "last_updated_by = '" << escapeSQLChars(last_updated_by) << "', "
-		<< "totp_key = '" << escapeSQLChars(totp_key) << "' "
+		<< "totp_key = '" << escapeSQLChars(totp_key) << "', "
+		<< "hostname = '" << escapeSQLChars(hostname) << "' "
 		<< queryCondition << id
 		<< ends;
 

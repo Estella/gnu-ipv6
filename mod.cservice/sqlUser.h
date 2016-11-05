@@ -145,9 +145,12 @@ public:
 
 	inline const unsigned int& getLastFailedLoginTS() const
 		{ return failed_login_ts ; }
-	
+
 	inline const std::string&	getTotpKey() const
 		{ return totp_key ; }
+
+	inline const std::string&	getHostName() const
+		{ return hostname ; }
 
 	/*
 	 *  Methods to set data atrributes.
@@ -214,6 +217,10 @@ public:
 
 	inline void setTotpKey( const std::string& _totp_key )
 		{ totp_key = _totp_key ; }
+
+	inline void setHostName( const std::string& _hostname )
+		{ hostname = _hostname ; }
+
 	/*
 	 * Method to perform a SQL 'UPDATE' and commit changes to this
 	 * object back to the database.
@@ -262,6 +269,7 @@ protected:
 	unsigned int	failed_logins;
 	unsigned int	failed_login_ts;
 	std::string	totp_key;
+	std::string	hostname;
 
 	dbHandle*	SQLDb;
 } ;

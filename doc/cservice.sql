@@ -231,6 +231,7 @@ CREATE TABLE users (
 	signup_ip VARCHAR(15),
 	maxlogins INT4 DEFAULT 1,
 	totp_key  VARCHAR(60) DEFAULT '',
+	hostname VARCHAR(128) DEFAULT '',
 	PRIMARY KEY ( id )
 ) ;
 
