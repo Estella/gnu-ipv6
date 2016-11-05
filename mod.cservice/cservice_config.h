@@ -60,7 +60,7 @@
  * Do you want NEWPASS command or not?
  */
 
-#undef USE_NEWPASS
+#define USE_NEWPASS
 
 /**
  * Do you want to use the Noteserv functionality?
@@ -78,12 +78,12 @@
  * Do you want users to have the ability to set their own MAXLOGINS setting?
  */
 
-#undef USE_SETMAXLOGINS
+#define USE_SETMAXLOGINS
 
 /**
  * Define this if you want to enable the HELLO command.
  */
-#undef ALLOW_HELLO
+#define ALLOW_HELLO
 
 /**
  * Define this if you want the IP restriction to default to REJECT when no
