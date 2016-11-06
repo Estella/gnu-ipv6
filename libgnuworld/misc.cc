@@ -286,6 +286,14 @@ bool validUserMask(const string& userMask)
 	return true ;
 }
 
+bool validHostName(const string& hostname)
+{
+	std::size_t atpos = hostname.find('.');
+	if (atpos == string::npos)
+		return false;
+	return true;
+}
+
 bool validCIDRLength(const string& address)
 {
 	string hostip = extractHostIP(address);
