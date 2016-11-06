@@ -128,6 +128,7 @@ am_libircu_la_OBJECTS = libircu_la-msg_AC.lo libircu_la-msg_AD.lo \
 	libircu_la-msg_K.lo libircu_la-msg_L.lo libircu_la-msg_M351.lo \
 	libircu_la-msg_M391.lo libircu_la-msg_M.lo libircu_la-msg_N.lo \
 	libircu_la-msg_NOOP.lo libircu_la-msg_O.lo \
+	libircu_la-msg_PA.lo libircu_la-msg_P.lo \
 	libircu_la-msg_Q.lo libircu_la-msg_R.lo libircu_la-msg_RI.lo \
 	libircu_la-msg_RO.lo libircu_la-msg_S.lo \
 	libircu_la-msg_Server.lo libircu_la-msg_SQ.lo \
