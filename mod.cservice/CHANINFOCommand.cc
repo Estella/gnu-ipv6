@@ -391,6 +391,9 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 	if(adminAccess) {
 		bot->Notice(theClient, "EMail: %s",
 			theUser->getEmail().c_str());
+
+		bot->Notice(theClient, "Saved hostname: %s",
+			theUser->getHostName().c_str());
 	}
 
 	if( adminAccess || (tmpUser == theUser) )
