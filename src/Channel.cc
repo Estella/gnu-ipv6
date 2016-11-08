@@ -525,11 +525,9 @@ string Channel::createBan( const iClient* theClient )
 	assert( theClient != 0 ) ;
 
 	if (theClient->isModeF())
-//		return "*!*@" + theClient->getInsecureHost();
 		return "*!*@" + theClient->getAccount() + theClient->getHiddenHostSuffix();
         if (theClient->isModeX())
                 return "*!*@" + theClient->getInsecureHost();
-//              return "*!*@" + theClient->getAccount() + theClient->getHiddenHostSuffix();
         else
                 return createBanMask(theClient->getNickUserHost());
 }
