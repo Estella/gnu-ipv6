@@ -524,11 +524,16 @@ string Channel::createBan( const iClient* theClient )
 {
 	assert( theClient != 0 ) ;
 
-	if (theClient->isModeX())
-		return "*!*@" + theClient->getInsecureHost();
-	else
-		return createBanMask(theClient->getNickUserHost());
+	if (theClient->isModeF())
+//		return "*!*@" + theClient->getInsecureHost();
+		return "*!*@" + theClient->getAccount() + theClient->getHiddenHostSuffix();
+        if (theClient->isModeX())
+                return "*!*@" + theClient->getInsecureHost();
+//              return "*!*@" + theClient->getAccount() + theClient->getHiddenHostSuffix();
+        else
+                return createBanMask(theClient->getNickUserHost());
 }
+
 void Channel::removeAllModes()
 {
 for( userIterator uItr = userList_begin() ; uItr != userList_end() ;
