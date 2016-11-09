@@ -56,6 +56,7 @@ const sqlUser::flagType sqlUser::F_NOADDUSER =		0x200 ;
 const sqlUser::flagType sqlUser::F_TOTP_ENABLED = 	0x400;
 const sqlUser::flagType sqlUser::F_TOTP_REQ_IPR =       0x800;
 const sqlUser::flagType sqlUser::F_POWER = 		0x1000;
+const sqlUser::flagType sqlUser::F_AUTONICK = 		0x2000;
 
 const unsigned int sqlUser::EV_SUSPEND		= 1;
 const unsigned int sqlUser::EV_UNSUSPEND	= 2;
@@ -69,6 +70,7 @@ sqlUser::sqlUser(dbHandle* _SQLDb)
    password(),
    last_seen( 0 ),
    url(),
+   nickname(),
    language_id( 0 ),
    flags( 0 ),
    last_used( 0 ),
@@ -195,17 +197,18 @@ id = atoi(SQLDb->GetValue(row, 0));
 user_name = SQLDb->GetValue(row, 1);
 password = SQLDb->GetValue(row, 2);
 url = SQLDb->GetValue(row, 3);
-language_id = atoi(SQLDb->GetValue(row, 4));
-flags = atoi(SQLDb->GetValue(row, 5));
-last_updated_by = SQLDb->GetValue(row, 6);
-last_updated = atoi(SQLDb->GetValue(row, 7));
-email = SQLDb->GetValue(row, 8);
-maxlogins = atoi(SQLDb->GetValue(row, 9));
-verifdata = SQLDb->GetValue(row, 10);
+nickname = SQLDb->GetValue(row, 4);
+language_id = atoi(SQLDb->GetValue(row, 5));
+flags = atoi(SQLDb->GetValue(row, 6));
+last_updated_by = SQLDb->GetValue(row, 7);
+last_updated = atoi(SQLDb->GetValue(row, 8));
+email = SQLDb->GetValue(row, 9);
+maxlogins = atoi(SQLDb->GetValue(row, 10));
+verifdata = SQLDb->GetValue(row, 11);
 failed_logins = 0;
 failed_login_ts = 0;
-totp_key = SQLDb->GetValue(row, 11);
-hostname = SQLDb->GetValue(row, 12); 
+totp_key = SQLDb->GetValue(row, 12);
+hostname = SQLDb->GetValue(row, 13);
 
 /* Fetch the "Last Seen" time from the users_lastseen table. */
 
@@ -231,6 +234,7 @@ stringstream queryString;
 queryString	<< queryHeader
 		<< "SET flags = " << flags << ", "
 		<< "password = '" << password << "', "
+		<< "nickname = '" << escapeSQLChars(nickname) << "', "
 		<< "language_id = " << language_id << ", "
 		<< "maxlogins = " << maxlogins << ", "
 		<< "last_updated = now()::abstime::int4, "

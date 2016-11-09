@@ -140,6 +140,8 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 		flagsSet += "SUSPEND ";
 	if (theUser->getFlag(sqlUser::F_INVIS))
 		flagsSet += "INVISIBLE ";
+	if (theUser->getFlag(sqlUser::F_AUTONICK))
+		flagsSet += "AUTONICK ";
 	if (theUser->getFlag(sqlUser::F_NOADDUSER))
 		flagsSet += "NOADDUSER ";
 	/* flags only visible to *1+ users */
@@ -391,6 +393,11 @@ if( string::npos == st[ 1 ].find_first_of( '#' ) )
 	if(adminAccess) {
 		bot->Notice(theClient, "EMail: %s",
 			theUser->getEmail().c_str());
+
+#ifdef USING_NEFARIOUS
+		bot->Notice(theClient, "Nickname: %s",
+			theUser->getNickName().c_str());
+#endif
 
 		bot->Notice(theClient, "Saved hostname: %s",
 			theUser->getHostName().c_str());

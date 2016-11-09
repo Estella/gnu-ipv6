@@ -98,6 +98,7 @@ namespace gnuworld {
 
   const int servnotice = 800;
   const int say = 800;
+  const int nickset = 951;
 
   // Debug Commands
   const int shutdown = 900;

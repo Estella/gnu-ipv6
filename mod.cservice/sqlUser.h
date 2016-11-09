@@ -55,6 +55,7 @@ public:
 	static const flagType F_TOTP_ENABLED;
 	static const flagType F_TOTP_REQ_IPR;
 	static const flagType F_POWER;
+	static const flagType F_AUTONICK;
 
 	/*
 	 *   User 'Event' Flags, used in the userlog table.
@@ -81,6 +82,9 @@ public:
 
 	inline const std::string&	getUrl() const
 		{ return url ; }
+
+	inline const std::string&	getNickName() const
+		{ return nickname ; }
 
 	inline const unsigned int&	getLanguageId() const
 		{ return language_id ; }
@@ -164,6 +168,9 @@ public:
 
 	inline void setPassword( const std::string& _password )
 		{ password = _password; }
+
+	inline void setNickName( const std::string& _nickname )
+		{ nickname = _nickname; }
 
 	inline void setLastSeen( const time_t& _last_seen,
 			const std::string& _last_hostmask,
@@ -253,6 +260,7 @@ protected:
 	std::string	password ;
 	time_t		last_seen ;
 	std::string	url ;
+	std::string	nickname ;
 	unsigned int	language_id ;
 	flagType	flags ;
 	std::string	last_updated_by ;
