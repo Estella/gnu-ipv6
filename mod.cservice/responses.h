@@ -230,6 +230,9 @@ namespace gnuworld
 		const int reason_must =			192;
 		const int susp_reason =			193;
 		const int unsusp_reason =			194;
+		const int welcome_max_len =			205;
+		const int welcome_cleared =			206;
+		const int welcome_status =			207;
 		const int greeting = 				9998;
 		const int motd =					9999;
 	}
