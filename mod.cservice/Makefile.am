@@ -52,6 +52,7 @@ libcservice_la_SOURCES = banMatcher.cc \
 	REMOVEALLCommand.cc \
 	REMUSERCommand.cc \
 	SAYCommand.cc \
+	SCANCommand.cc \
 	SCANHOSTCommand.cc \
 	SCANUNAMECommand.cc \
 	SCANEMAILCommand.cc \

@@ -101,6 +101,7 @@ am_libcservice_la_OBJECTS = libcservice_la-banMatcher.lo \
 	libcservice_la-REMIGNORECommand.lo \
 	libcservice_la-REMOVEALLCommand.lo \
 	libcservice_la-REMUSERCommand.lo libcservice_la-SAYCommand.lo \
+	libcservice_la-SCANCommand.lo \
 	libcservice_la-SCANHOSTCommand.lo \
 	libcservice_la-SCANUNAMECommand.lo \
 	libcservice_la-SCANEMAILCommand.lo \
@@ -326,6 +327,7 @@ libcservice_la_SOURCES = banMatcher.cc \
 	REMOVEALLCommand.cc \
 	REMUSERCommand.cc \
 	SAYCommand.cc \
+	SCANCommand.cc \
 	SCANHOSTCommand.cc \
 	SCANUNAMECommand.cc \
 	SCANEMAILCommand.cc \
@@ -475,6 +477,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcservice_la-REMOVEALLCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcservice_la-REMUSERCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcservice_la-SAYCommand.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcservice_la-SCANCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcservice_la-SCANEMAILCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcservice_la-SCANHOSTCommand.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libcservice_la-SCANUNAMECommand.Plo@am__quote@
@@ -842,6 +845,13 @@ libcservice_la-SAYCommand.lo: SAYCommand.cc
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='SAYCommand.cc' object='libcservice_la-SAYCommand.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libcservice_la_CXXFLAGS) $(CXXFLAGS) -c -o libcservice_la-SAYCommand.lo `test -f 'SAYCommand.cc' || echo '$(srcdir)/'`SAYCommand.cc
+
+libcservice_la-SCANCommand.lo: SCANCommand.cc 
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libcservice_la_CXXFLAGS) $(CXXFLAGS) -MT libcservice_la-SCANCommand.lo -MD -MP -MF $(DEPDIR)/libcservice_la-SCANCommand.Tpo -c -o libcservice_la-SCANCommand.lo `test -f 'SCANCommand.cc' || echo '$(srcdir)/'`SCANCommand.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libcservice_la-SCANCommand.Tpo $(DEPDIR)/libcservice_la-SCANCommand.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='SCANCommand.cc' object='libcservice_la-SCANCommand.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libcservice_la_CXXFLAGS) $(CXXFLAGS) -c -o libcservice_la-SCANCommand.lo `test -f 'SCANCommand.cc' || echo '$(srcdir)/'`SCANCommand.cc
 
 libcservice_la-SCANHOSTCommand.lo: SCANHOSTCommand.cc
 @am__fastdepCXX_TRUE@	$(LIBTOOL)  --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libcservice_la_CXXFLAGS) $(CXXFLAGS) -MT libcservice_la-SCANHOSTCommand.lo -MD -MP -MF $(DEPDIR)/libcservice_la-SCANHOSTCommand.Tpo -c -o libcservice_la-SCANHOSTCommand.lo `test -f 'SCANHOSTCommand.cc' || echo '$(srcdir)/'`SCANHOSTCommand.cc
