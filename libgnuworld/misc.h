@@ -164,6 +164,8 @@ string extractHostIP( const string& ) ;
 // Check for valid hostmask.
 bool validUserMask(const string& );
 
+bool checkAllValidChars(const std::string& );
+
 bool validHostName(const std::string& );
 
 bool validCIDRLength(const string& );
