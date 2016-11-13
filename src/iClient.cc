@@ -129,6 +129,39 @@ customDataMap = 0 ;
 numericIP = xIP( IP ).GetNumericIP();
 }
 
+//Nefarios2 cloackedHost/IP case construction
+iClient::iClient( const unsigned int& /* _uplink */,
+        const string& _yyxxx,
+        const string& _nickName,
+        const string& _userName,
+        const string& _hostBase64,
+        const string& _insecureHost,
+        const string& _realInsecureHost,
+        const string& _mode,
+        const string& _account,
+        const time_t _account_ts,
+        const string& _description,
+        const time_t& _connectTime,
+        const std::string& _cloakHost,
+        const std::string& _cloakIP)
+: NetworkTarget( _yyxxx ),
+        nickName( _nickName ),
+        userName( _userName ),
+        IP( xIP( _hostBase64, true ).GetLongIP() ),
+        insecureHost( _insecureHost ),
+        realInsecureHost( _realInsecureHost ),
+        description( _description),
+        connectTime( _connectTime ),
+        mode( 0 ),
+        account( _account ),
+        account_ts( _account_ts ),
+        cloakHost(_cloakHost),
+        cloakIP(_cloakIP)
+{
+setModes( _mode ) ;
+customDataMap = 0 ;
+}
+
 iClient::~iClient()
 {
 delete customDataMap ;
