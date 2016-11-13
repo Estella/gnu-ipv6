@@ -523,10 +523,10 @@ return (modeString + ' ' + argString) ;
 string Channel::createBan( const iClient* theClient )
 {
 	assert( theClient != 0 ) ;
+	if (!theClient->getCloakHost().empty())
+                return "*!*@" + theClient->getCloakHost();
 	if (!theClient->getCloakIP().empty())
 		return "*!*@" + theClient->getAccount() + theClient->getCloakIP();
-	if (!theClient->getCloakHost().empty())
-		return "*!*@" + theClient->getCloakHost();
 	if (theClient->isModeF())
 		return "*!*@" + theClient->getAccount() + theClient->getHiddenHostSuffix();
         if (theClient->isModeX())
