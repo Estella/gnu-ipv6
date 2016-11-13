@@ -54,6 +54,8 @@ const iClient::modeType iClient::MODE_G           = 0x0080 ;
 const iClient::modeType iClient::MODE_SERVNOTICES = 0x0100 ;
 const iClient::modeType iClient::MODE_FAKE        = 0x0200 ;
 const iClient::modeType iClient::MODE_FAKE_HOST   = 0x0400 ;
+const iClient::modeType iClient::MODE_CLOAK_HOST  = 0x0800 ;
+const iClient::modeType iClient::MODE_CLOAK_IP    = 0x1000 ;
 
 string iClient::hiddenHostSuffix( "we.all.worship.mrbean.org" ) ;
 
@@ -225,6 +227,12 @@ for( string::size_type i = 0 ; i < newModes.size() ; i++ )
 		case 'f':
 			setFakeHost(fakeHost);
 			break ;
+		case 'C':
+			setModeC();
+			break;
+		case 'c':
+			setModec();
+			break;
 		case '+':
 			break ;
 		default:
@@ -271,6 +279,8 @@ if( isModeX() )		retMe += 'x' ;
 if( isModeG() )		retMe += 'g' ;
 if( isModeF() )		retMe += 'f' ;
 if( isModeF() )		retMe += 'h' ;
+if( isModeC() )		retMe += 'C' ;
+if( isModeC() )		retMe += 'C' ;
 
 return retMe ;
 }

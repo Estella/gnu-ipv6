@@ -154,12 +154,13 @@ string cloackhost  ;
 string cloackip ;
 
 xParameters::size_type currentArgIndex = 6 ;
-bool IsCloaked = false;
 bool IsRegistered = false;
 bool HasFakeHost = false;
 bool HasSetHost = false;
 bool HasCloakHost = false;
 bool HasCloakIP = false;
+// This will be true if any sethost/fakehost/cloakhost is present
+bool HasExtraHost = false;
 
 // precondition: currentArgIndex points at the next params[] index
 // to check
@@ -184,25 +185,27 @@ if( '+' == params[ currentArgIndex ][ 0 ] )
 			case 'h': //TODO: Solve this? Will be case when this will blow in face too?
 				//sethost = params[ currentArgIndex++ ] ;
 				HasSetHost = true;
+				HasExtraHost = true;
 				break ;
 			case 'f':
 				//fakehost = params[ currentArgIndex++ ] ;
 				HasFakeHost = true;
+				HasExtraHost = true;
 				break ;
 			case 'C': //CloakHost
-				IsCloaked = true;
 				HasCloakHost = true;
+				HasExtraHost = true;
 				break;
 			case 'c': //CloakIP
-				IsCloaked = true;
 				HasCloakIP = true;
+				HasExtraHost = true;
 				break;
 			default: break ;
 			} // switch( *modePtr )
 		} // for()
 	} // if( '+' )
 
-if ((IsCloaked || HasFakeHost) && IsRegistered)
+if ((HasExtraHost || HasFakeHost) && IsRegistered)
 	account = params[ --currentArgIndex ] ;
 
 //DEBUG
@@ -210,7 +213,7 @@ elog << "msg_N> params[" << currentArgIndex << "] = account = " << params[curren
 
 // postcondition: currentArgIndex points at the next params[] index
 // to check
-if (!IsCloaked)
+if (!HasExtraHost)
 if (!account.empty())
 	{
 	StringTokenizer st( account, ':' ) ;
@@ -233,9 +236,11 @@ if (!account.empty())
 iClient* newClient;
 
 // Nefarious2 with cloaked host/IP
-if ((IsCloaked) || (HasFakeHost))
+if (HasExtraHost)
 {
 	if (IsRegistered) currentArgIndex++;
+	if (HasSetHost)
+		sethost = params[ currentArgIndex++ ] ;
 	if (HasFakeHost)
 		fakehost = params[ currentArgIndex++ ] ;
 	if (HasCloakHost)
