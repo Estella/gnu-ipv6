@@ -6222,7 +6222,7 @@ bool cservice::doInternalBanAndKick(sqlChannel* theChan,
 		return true;
 	}
 	// If the flooder client is umode +x, just punish him, and in this way protect his hidden address
-	if (theClient->isModeX())
+	if ((theClient->isModeX()) && (theClient->isModeR()))
 	{
 		doSingleBanAndKick(theChan, theClient, banLevel, banExpire, theReason);
 		return true;
@@ -6234,7 +6234,7 @@ bool cservice::doInternalBanAndKick(sqlChannel* theChan,
 		{
 			// If the current client is umode +x Here, then the sender theClient as not
 			// so this is a logged clone of his, therefore his hidden address must be protected
-			if (tmpUser->getClient()->isModeX())
+			if ((tmpUser->getClient()->isModeX()) && (tmpUser->getClient()->isModeR()))
 				continue;
 			doSingleBanAndKick(theChan, tmpUser->getClient(), banLevel, banExpire, theReason);
 		}
@@ -6271,7 +6271,7 @@ bool cservice::doInternalBanAndKick(sqlChannel* theChan,
 		return true;
 	}
 	// If the flooder client is umode +x, just punish him, and in this way protect his hidden address
-	if (theClient->isModeX())
+	if ((theClient->isModeX()) && (theClient->isModeR()))
 	{
 		doSingleBanAndKick(theChan, theClient, banLevel, banExpire, theReason);
 		return true;
@@ -6283,7 +6283,7 @@ bool cservice::doInternalBanAndKick(sqlChannel* theChan,
 		{
 			// If the current client is umode +x Here, then the sender theClient as not
 			// so this is a logged clone of his, therefore his hidden address must be protected
-			if (tmpUser->getClient()->isModeX())
+			if ((tmpUser->getClient()->isModeX()) && (tmpUser->getClient()->isModeR()))
 				continue;
 			doSingleBanAndKick(theChan, tmpUser->getClient(), banLevel, banExpire, theReason);
 		}
