@@ -2662,6 +2662,7 @@ stringstream deleteQuery;
 deleteQuery	<< "DELETE FROM bans "
 		<< "WHERE expires <= "
 		<< expiredTime
+		<< " AND expires <> 0"
 		<< ends;
 
 #ifdef LOG_SQL
@@ -3782,70 +3783,84 @@ bool cservice::isValidUser(const string& userName)
 	     		<< endl ;
 	#endif
 		return false;
-	} else if (SQLDb->Tuples() != 0)
+	}
+	else if (SQLDb->Tuples() != 0)
 	{
-		string matchString;
+		ValidUserDataListType ValidUserDataList;
 		for (unsigned int i = 0 ; i < SQLDb->Tuples(); i++)
 		{
-			if (atoi(SQLDb->GetValue(i,2)) == 6)
+			ValidUserData current;
+			current.UserName = SQLDb->GetValue(i,0);
+			current.Email = SQLDb->GetValue(i,1);
+			current.type = atoi(SQLDb->GetValue(i,2));
+			ValidUserDataList.push_back(current);
+			}
+			for (ValidUserDataListType::const_iterator itr = ValidUserDataList.begin() ; itr != ValidUserDataList.end(); ++itr)
 			{
-				matchString = SQLDb->GetValue(i,0);
-				if (matchString[0] == '!')
+			if (itr->type == 6)
+			{
+				if (itr->UserName[0] == '!')
 				{
+					string matchString = itr->UserName;
 					matchString.erase(0,1);
 					if (!match(matchString,tmpUser->getVerifData()))
 					{
-						AddToValidResponseString("INVALID VERIF");
+						if (validResponseString.find("INVALID VERIF") == string::npos)
+							AddToValidResponseString("INVALID VERIF");
 						isValid = false;
 					}
 				}
 				else
 				{   /* This should be the matchcase metod - TODO: need to find a solution */
-					if (!casematch(matchString,tmpUser->getVerifData()))
-					//if (0 != strcmp(matchString,tmpUser->getVerifData()))
+					if (!casematch(itr->UserName,tmpUser->getVerifData()))
+					//if (0 != strcmp(itr->UserName,tmpUser->getVerifData()))
 					{
+						if (validResponseString.find("INVALID VERIF") == string::npos)
 						AddToValidResponseString("INVALID VERIF");
 						isValid = false;
 					}
 				}
 			}
-			matchString = SQLDb->GetValue(i,0);
-			if (!match(matchString,tmpUser->getUserName()) && (matchString != "*"))
+			if (!match(itr->UserName,tmpUser->getUserName()) && (itr->UserName != "*"))
 			{
-				if (atoi(SQLDb->GetValue(i,2)) < 4)
+				if (itr->type < 4)
 				{
+					if (validResponseString.find("NOREG") == string::npos)
 					AddToValidResponseString("NOREG");
 					isValid = false;
 				}
 				//This case is taken account by the webinterface
 				//We skip this because we only look after *existing* usernames
-				//if (atoi(SQLDb->GetValue(i,2)) == 4)
+				//if (itr->type == 4)
 				//	AddToValidResponseString("FRAUD");
-				if (atoi(SQLDb->GetValue(i,2)) == 5)
+				if (itr->type == 5)
 				{
+					if (validResponseString.find("LOCKED") == string::npos)
 					AddToValidResponseString("LOCKED");
 					isValid = false;
 				}
 			}
-			matchString = SQLDb->GetValue(i,1);
-			if (!match(matchString,tmpUser->getEmail()) && (matchString != "*"))
+			if (!match(fixAddress(itr->Email), fixAddress(tmpUser->getEmail())))
 			{
-				if (atoi(SQLDb->GetValue(i,2)) < 4)
+				if (itr->type < 4)
 				{
+					if (validResponseString.find("INV.E-MAIL") == string::npos)
 					AddToValidResponseString("INV.E-MAIL");
 					isValid = false;
 				}
 				//This case is taken account by the webinterface
 				//TODO: probably we should handle this case too
-				//if (atoi(SQLDb->GetValue(i,2)) == 4)
+				//if (itr->type == 4)
 				//	AddToValidResponseString("FRAUD");
-				if (atoi(SQLDb->GetValue(i,2)) == 5)
+				if (itr->type  == 5)
 				{
-					AddToValidResponseString("LOCKED E-MAIL");
+					if (validResponseString.find("LOCKED E-MAIL") == string::npos)
+						AddToValidResponseString("LOCKED E-MAIL");
 					isValid = false;
 				}
 			}
 		}
+		ValidUserDataList.clear();
 	}
 	if (tmpUser->getFlag(sqlUser::F_FRAUD))
 	{
@@ -5511,7 +5526,7 @@ void cservice::doAllBansOnChan(Channel* tmpChan)
 	{
 		ChannelUser* tmpUser = chanUsers->second;
 		/* check if this user is banned */
-		(void)checkBansOnJoin(tmpChan, reggedChan, tmpUser->getClient());
+		checkBansOnJoin(tmpChan, reggedChan, tmpUser->getClient());
 	}
 	return;
 }
@@ -6213,7 +6228,33 @@ bool cservice::doInternalBanAndKick(sqlChannel* theChan,
 	iClient* theClient, const string& theReason)
 {
 	unsigned short banLevel = 25;
-	unsigned int banExpire = (unsigned int)(300 + currentTime());
+	unsigned int banExpire = 300;
+
+	/*
+	 * If this guy is auth'd.. suspend his account.
+	 */
+	sqlUser* theUser = isAuthed(theClient, false);
+	if (theUser)
+	{
+		sqlLevel* accessRec = getLevelRecord(theUser, theChan);
+		if (accessRec && (accessRec->getSuspendExpire() < (currentTime() + 300)))
+		{
+			int susLev = accessRec->getAccess() + 1;
+			if (susLev <= 500)
+			{
+				banLevel = susLev;
+				if (accessRec->getSuspendLevel() < susLev)
+					accessRec->setSuspendLevel(susLev);
+				accessRec->setSuspendExpire(currentTime() + 300);
+				accessRec->setSuspendBy(nickName);
+				accessRec->setSuspendReason(theReason);
+				accessRec->commit();
+			}
+		}
+	}
+	if (banLevel > 500)
+		return true;
+
 	Channel* netChan = Network->findChannel(theChan->getName());
 	/* Even if the channel is currently empty, presumably the sqlChannel exists in the db */
 	if (!netChan)
@@ -6237,24 +6278,6 @@ bool cservice::doInternalBanAndKick(sqlChannel* theChan,
 			if ((tmpUser->getClient()->isModeX()) && (tmpUser->getClient()->isModeR()))
 				continue;
 			doSingleBanAndKick(theChan, tmpUser->getClient(), banLevel, banExpire, theReason);
-		}
-	}
-
-	/*
-	 * Finally, if this guy is auth'd.. suspend his account.
-	 */
-	sqlUser* theUser = isAuthed(theClient, false);
-	if (theUser)
-	{
-		sqlLevel* accessRec = getLevelRecord(theUser, theChan);
-		if (accessRec && (accessRec->getSuspendExpire() < (currentTime() + 300)))
-		{
-			int susLev = accessRec->getAccess() + 1;
-			if (accessRec->getSuspendLevel() < susLev)
-				accessRec->setSuspendLevel(susLev);
-			accessRec->setSuspendExpire(currentTime() + 300);
-			accessRec->setSuspendBy(nickName);
-			accessRec->commit();
 		}
 	}
 	return true ;
@@ -8551,6 +8574,20 @@ bool cservice::doCommonAuth(iClient* theClient, string username)
 		}
 
 	/*
+	 * Check they aren't banned < 75 in any chan.
+	 */
+	for (iClient::channelIterator chItr = theClient->channels_begin(); chItr != theClient->channels_end(); ++chItr)
+	{
+		sqlChannel* theChan = getChannelRecord((*chItr)->getName());
+		//Channel* netChan = Network->findChannel(theChan->getName());
+		if (theChan)
+		{
+			checkBansOnJoin((*chItr), theChan, theClient);
+		}
+	}
+
+
+	/*
 	 * The fun part! For all channels this user has access on, and has
 	 * AUTOP set, and isn't already op'd on - do the deed.
 	 * We're auto-opping only on not LoC case, but Auto-Invites are done in any case !!	--Seven
@@ -8682,20 +8719,6 @@ bool cservice::doCommonAuth(iClient* theClient, string username)
 			{
 			continue;
 			}
-
-		/*
-		 * Check they aren't banned < 75 in the chan.
-		 */
-
-		sqlBan* tmpBan = isBannedOnChan(theChan, theClient);
-		if( tmpBan) {
-			if (tmpBan->getLevel() < 75)  {
-				continue;
-			} else {
-				Kick(netChan,theClient,tmpBan->getReason());
-				continue;
-			}
-		}
 
 		/*
 	 	 *  If its AUTOOP, check for op's and do the deed.

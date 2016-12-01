@@ -530,7 +530,7 @@ public:
 	/* Bans and kick just one client, with level, period, reason */
 	bool doSingleBanAndKick(sqlChannel*, iClient*, unsigned short, unsigned int, const string& theReason);
 
-	/* Bans & kicks a specified user with a specific reason */
+	/* Bans & kicks &*Suspends* a specified user with a specific reason */
 	bool doInternalBanAndKick(sqlChannel*, iClient*, const string&);
 
     /* Bans & kicks all client belonging to the IP addrees, with a specific level, period, reason */
@@ -571,9 +571,14 @@ public:
 
 	time_t currentTime() const ;
 
-	/* Queue to hold pending reops */
-	typedef map < string, time_t > reopQType;
-	reopQType reopQ;
+	struct ValidUserData
+	{
+		string UserName;
+		string Email;
+		int type;
+	};
+
+	typedef vector<ValidUserData> ValidUserDataListType;
 
 	/* List of channels in 'pending' registration state. */
 	typedef map < string, sqlPendingChannel*, noCaseCompare >
